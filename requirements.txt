@@ -1,11 +1,2 @@
 flask
-services:
-  - type: web
-    name: odanet-form
-    env: python
-    plan: free
-    buildCommand: ""
-    startCommand: python app.py
-    envVars:
-      - key: PORT
-        value: 10000
+Fix requirements.txt
