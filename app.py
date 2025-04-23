@@ -67,7 +67,8 @@ def index():
         with open("odanet_users.txt", "a") as f:
             f.write(f"{name}, {city}, {budget}\n")
     return render_template_string(html, name=name, city=city, budget=budget)
-
+import os
+port = int(os.environ.get("PORT", 10000))
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=10000)
+    app.run(host='0.0.0.0', port=port)
    
