@@ -3,7 +3,8 @@ import os
 
 app = Flask(__name__)
 
-html = '''
+# HTML for user form
+form_html = '''
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -39,6 +40,7 @@ html = '''
 </html>
 '''
 
+# User-facing form
 @app.route('/', methods=['GET', 'POST'])
 def index():
     name = city = budget = ""
@@ -48,12 +50,9 @@ def index():
         budget = request.form['budget']
         with open("odanet_users.txt", "a") as f:
             f.write(f"{name}, {city}, {budget}\n")
-    return render_template_string(html, name=name, city=city, budget=budget)
+    return render_template_string(form_html, name=name, city=city, budget=budget)
 
-# REQUIRED for Render to run on the correct port
-if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host='0.0.0.0', port=port)
+# Admin dashboard
 @app.route('/admin')
 def admin():
     try:
@@ -63,44 +62,7 @@ def admin():
     except FileNotFoundError:
         rows = []
 
-    html = '''
-    <html>
-    <head>
-        <title>OdaNet Kayıtlar</title>
-        <style>
-            body { font-family: Arial; padding: 30px; background: #f9fafb; color: #1f2937; }
-            table { border-collapse: collapse; width: 100%; max-width: 700px; margin: auto; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
-            th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
-            th { background: #6366f1; color: white; }
-            h2 { text-align: center; margin-bottom: 20px; }
-        </style>
-    </head>
-    <body>
-        <h2>Oda Başvuru Listesi</h2>
-        <table>
-            <tr><th>Ad</th><th>Şehir</th><th>Bütçe (₺)</th></tr>
-            {% for row in rows %}
-              <tr>
-                <td>{{ row[0] }}</td>
-                <td>{{ row[1] }}</td>
-                <td>{{ row[2] }}</td>
-              </tr>
-            {% endfor %}
-        </table>
-    </body>
-    </html>
-    '''
-    return render_template_string(html, rows=rows)
-@app.route('/admin')
-def admin():
-    try:
-        with open("odanet_users.txt", "r") as f:
-            lines = f.readlines()
-        rows = [line.strip().split(', ') for line in lines]
-    except FileNotFoundError:
-        rows = []
-
-    html = '''
+    admin_html = '''
     <html>
     <head>
         <title>Oda Başvuruları</title>
@@ -127,4 +89,9 @@ def admin():
     </body>
     </html>
     '''
-    return render_template_string(html, rows=rows)
+    return render_template_string(admin_html, rows=rows)
+
+# Required for Render
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host='0.0.0.0', port=port)
