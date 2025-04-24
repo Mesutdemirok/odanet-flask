@@ -1,3 +1,4 @@
+form_html = '''
 <form method="post">
   <h2>İlan Kategorisi</h2>
 
@@ -34,3 +35,4 @@
 
   <button type="submit">Kaydet</button>
 </form>
+'''
